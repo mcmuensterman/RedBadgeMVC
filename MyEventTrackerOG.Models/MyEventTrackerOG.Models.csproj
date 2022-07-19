@@ -14,4 +14,8 @@
     <ProjectReference Include="..\MyEventTrackerOG.Data\MyEventTrackerOG.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Category\" />
+  </ItemGroup>
+
 </Project>

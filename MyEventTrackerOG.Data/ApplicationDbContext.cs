@@ -9,5 +9,8 @@ namespace MyEventTrackerOG.Data
             : base(options)
         {
         }
+
+        public DbSet<MyEvent> MyEvents { get; set; }
+
     }
 }

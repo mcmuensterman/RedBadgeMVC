@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyEventTrackerOG.Data;
+using MyEventTrackerOG.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +15,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+
 // Add dependency injection items
-//builder.Services.AddScoped<IMyEventService, MyEventService>();
+builder.Services.AddScoped<IMyEventService, MyEventService>();
 //builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
