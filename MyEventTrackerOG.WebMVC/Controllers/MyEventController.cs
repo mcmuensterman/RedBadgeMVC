@@ -23,7 +23,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
             return Guid.Parse(userIdClaim);
         }
 
-        private bool SetUserId()
+        private bool SetUserIdIS()
         {
             var userId = GetUserId();
             if (userId == null) return false;
@@ -34,7 +34,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
 
         public IActionResult Index()
         {
-            if (!SetUserId()) return Unauthorized();
+            if (!SetUserIdIS()) return Unauthorized();
 
             var notes = _myEventService.GetMyEvents();
             return View(notes.ToList());
@@ -51,9 +51,9 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(MyEventCreate model)
         {
-            if (!SetUserId()) return Unauthorized();
+            if (!SetUserIdIS()) return Unauthorized();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
@@ -71,7 +71,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
 
        public ActionResult Details(int id)
         {
-            if (!SetUserId()) return Unauthorized();
+            if (!SetUserIdIS()) return Unauthorized();
             
             var model = _myEventService.GetMyEventById(id);
 
@@ -80,7 +80,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
 
         public ActionResult Edit(int id)
         {
-            if (!SetUserId()) return Unauthorized();
+            if (!SetUserIdIS()) return Unauthorized();
 
             var detail = _myEventService.GetMyEventById(id);
             var model = new MyEventEdit()
@@ -105,7 +105,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
                 return View(model);
             }
 
-            if (!SetUserId()) return Unauthorized();
+            if (!SetUserIdIS()) return Unauthorized();
             if (_myEventService.UpdateMyEvent(model))
             {
                 TempData["SaveResult"] = "Your Entry was updated.";
@@ -119,7 +119,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         [ActionName("Delete")]
         public ActionResult Delete(int id)
         {
-            if (!SetUserId()) return Unauthorized();
+            if (!SetUserIdIS()) return Unauthorized();
 
             var model = _myEventService.GetMyEventById(id);
 
@@ -131,7 +131,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeletePost(int id)
         {
-            if (!SetUserId()) return Unauthorized();
+            if (!SetUserIdIS()) return Unauthorized();
             _myEventService.DeleteMyEvent(id);
             TempData["SaveResult"] = "Your Event was deleted!";
             return RedirectToAction(nameof(Index));
