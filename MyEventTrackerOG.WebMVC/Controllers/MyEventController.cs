@@ -41,16 +41,18 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult Create()
+        
+        public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(MyEventCreate model)
+        public ActionResult Create(MyEventCreate model)
         {
+            if (!SetUserId()) return Unauthorized();
+
             if (ModelState.IsValid)
             {
                 return View(model);
@@ -58,7 +60,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
 
             if (_myEventService.CreateMyEvent(model))
             {
-                TempData["SaveResult"] = "Your event was created!";
+                TempData["SaveResult"] = "Your Event was created!";
                 return RedirectToAction("Index");
             };
 
@@ -67,12 +69,72 @@ namespace MyEventTrackerOG.WebMVC.Controllers
             return View(model);
         }
 
- //       public IActionResult Details(int id)
- //       {
- //          var svc = CreateMyEventService();
- //           var model = svc.GetMyEventById(id);
+       public ActionResult Details(int id)
+        {
+            if (!SetUserId()) return Unauthorized();
+            
+            var model = _myEventService.GetMyEventById(id);
 
- //           return View(model);
- //       }
+            return View(model);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            if (!SetUserId()) return Unauthorized();
+
+            var detail = _myEventService.GetMyEventById(id);
+            var model = new MyEventEdit()
+            {
+                MyEventId = detail.MyEventId,
+                EventName = detail.EventName,
+                Location = detail.Location,
+                Content = detail.Content
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, MyEventEdit model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            if (model.MyEventId != id)
+            {
+                ModelState.AddModelError("", "Id Mismatch");
+                return View(model);
+            }
+
+            if (!SetUserId()) return Unauthorized();
+            if (_myEventService.UpdateMyEvent(model))
+            {
+                TempData["SaveResult"] = "Your Entry was updated.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            ModelState.AddModelError("", "Your Entry could not be updated.");
+            return View(model);
+        }
+
+        [ActionName("Delete")]
+        public ActionResult Delete(int id)
+        {
+            if (!SetUserId()) return Unauthorized();
+
+            var model = _myEventService.GetMyEventById(id);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeletePost(int id)
+        {
+            if (!SetUserId()) return Unauthorized();
+            _myEventService.DeleteMyEvent(id);
+            TempData["SaveResult"] = "Your Event was deleted!";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
