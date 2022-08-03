@@ -28,6 +28,18 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="MyEvent" asp-action="Index">My Events</a>
                         </li>
                         }
+                         @if (User.Identity.IsAuthenticated)
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">My Categories</a>
+                        </li>
+                        }
+                         @if (User.Identity.IsAuthenticated)
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Location" asp-action="Index">My Locations</a>
+                        </li>
+                        }
 
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

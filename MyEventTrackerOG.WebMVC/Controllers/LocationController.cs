@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MyEventTrackerOG.Models.Category;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MyEventTrackerOG.Models.Location;
 using MyEventTrackerOG.Services;
 using System.Security.Claims;
 
 namespace MyEventTrackerOG.WebMVC.Controllers
 {
-    public class CategoryController : Controller
+    public class LocationController : Controller
     {
-        private readonly ICategoryService _categoryService;
+        private readonly ILocationService _locationService;
 
-        public CategoryController(ICategoryService categoryService)
+        public LocationController(ILocationService locationService)
         {
-            _categoryService = categoryService;
+            _locationService = locationService;
         }
 
         private Guid GetUserId()
@@ -27,8 +28,8 @@ namespace MyEventTrackerOG.WebMVC.Controllers
             var userId = GetUserId();
             if (userId == null) return false;
 
-            //if everything works from above...
-            _categoryService.SetUserId(userId);
+
+            _locationService.SetUserId(userId);
             return true;
         }
 
@@ -36,14 +37,14 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         {
             if (!SetUserIdIS()) return Unauthorized();
 
-            var categories = _categoryService.GetAllCategories();
-            return View(categories.ToList());
+            var locations = _locationService.GetAllLocations();
+            return View(locations.ToList());
         }
 
         public ActionResult Details(int id)
         {
             if (SetUserIdIS()) return Unauthorized();
-            var model = _categoryService.GetCategoryById(id);
+            var model = _locationService.GetLocationById(id);
             return View(model);
         }
 
@@ -54,7 +55,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CategoryCreate model)
+        public ActionResult Create(LocationCreate model)
         {
             if (!SetUserIdIS()) return Unauthorized();
 
@@ -63,13 +64,13 @@ namespace MyEventTrackerOG.WebMVC.Controllers
                 return View(model);
             }
 
-            if (_categoryService.CreateCategory(model))
+            if (_locationService.CreateLocation(model))
             {
-                TempData["SaveResult"] = "Your Category was created!";
+                TempData["SaveResult"] = "Your Location was created!";
                 return RedirectToAction("Index");
             };
 
-            ModelState.AddModelError("", "Category could not be created.");
+            ModelState.AddModelError("", "Location could not be created.");
             return View(model);
         }
 
@@ -77,29 +78,29 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         {
             if (!SetUserIdIS()) return Unauthorized();
 
-            var detail = _categoryService.GetCategoryById(id);
-            var model = new CategoryEdit()
+            var detail = _locationService.GetLocationById(id);
+            var model = new LocationEdit()
             {
-                CategoryId = detail.CategoryId,
-                Name = detail.Name,
+                LocationId = detail.LocationId,
+                LocationName = detail.LocationName,
             };
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, CategoryEdit model)
+        public ActionResult Edit(int id, LocationEdit model)
         {
             if (!ModelState.IsValid) return View(model);
 
-            if (model.CategoryId != id)
+            if (model.LocationId != id)
             {
                 ModelState.AddModelError("", "Id Mismatch");
                 return View(model);
             }
 
             if (!SetUserIdIS()) return Unauthorized();
-            if (_categoryService.UpdateCategory(model))
+            if (_locationService.UpdateLocation(model))
             {
                 TempData["SaveResult"] = "Your category was updated.";
                 return RedirectToAction(nameof(Index));
@@ -114,7 +115,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         {
             if (!SetUserIdIS()) return Unauthorized();
 
-            var model = _categoryService.GetCategoryById(id);
+            var model = _locationService.GetLocationById(id);
 
             return View(model);
         }
@@ -125,7 +126,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         public ActionResult DeletePost(int id)
         {
             if (!SetUserIdIS()) return Unauthorized();
-            _categoryService.DeleteCategory(id);
+            _locationService.DeleteLocation(id);
             TempData["SaveResult"] = "Your note was deleted!";
             return RedirectToAction(nameof(Index));
         }

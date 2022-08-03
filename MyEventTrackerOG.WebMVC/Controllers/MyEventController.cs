@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MyEventTrackerOG.Models.Category;
 using MyEventTrackerOG.Models.MyEvent;
 using MyEventTrackerOG.Services;
 using System.Security.Claims;
@@ -44,6 +46,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         
         public ActionResult Create()
         {
+            ViewBag.CategorySelectList = new SelectList(GetCategoryList(), "CategoryId", "Name");
             return View();
         }
 
@@ -58,6 +61,8 @@ namespace MyEventTrackerOG.WebMVC.Controllers
                 return View(model);
             }
 
+            ViewBag.CategorySelectList = new SelectList(GetCategoryList(), "CategoryId", "Name");
+
             if (_myEventService.CreateMyEvent(model))
             {
                 TempData["SaveResult"] = "Your Event was created!";
@@ -69,7 +74,9 @@ namespace MyEventTrackerOG.WebMVC.Controllers
             return View(model);
         }
 
-       public ActionResult Details(int id)
+      
+
+        public ActionResult Details(int id)
         {
             if (!SetUserIdIS()) return Unauthorized();
             
@@ -136,5 +143,13 @@ namespace MyEventTrackerOG.WebMVC.Controllers
             TempData["SaveResult"] = "Your Event was deleted!";
             return RedirectToAction(nameof(Index));
         }
+
+        private IEnumerable<CategoryListItem> GetCategoryList()
+        {
+            if (!SetUserIdIS()) return default;
+            return _myEventService.CreateCategoryList();
+        }
+
+
     }
 }
