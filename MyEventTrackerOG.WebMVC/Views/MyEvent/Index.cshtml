@@ -39,11 +39,14 @@
                 @Html.DisplayFor(modelItem => item.MyEventId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EventName)
+<a class="controller-link controller-link-flex" asp-action="Details" asp-route-id="@item.MyEventId">
+                        @Html.DisplayFor(modelItem => item.EventName)
+                    </a>
+
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new {  id=item.MyEventId }) |
-                @Html.ActionLink("Details", "Details", new { id=item.MyEventId }) |
+@*                @Html.ActionLink("Details", "Details", new { id=item.MyEventId }) |*@
                 @Html.ActionLink("Delete", "Delete", new { id=item.MyEventId })
             </td>
         </tr>

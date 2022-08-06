@@ -19,6 +19,7 @@ builder.Services.AddControllersWithViews();
 // Add dependency injection items
 builder.Services.AddScoped<IMyEventService, MyEventService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
 
 var app = builder.Build();
 

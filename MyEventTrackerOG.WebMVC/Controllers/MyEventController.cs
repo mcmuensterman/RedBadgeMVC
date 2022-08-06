@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MyEventTrackerOG.Models.Category;
+using MyEventTrackerOG.Models.Location;
 using MyEventTrackerOG.Models.MyEvent;
 using MyEventTrackerOG.Services;
 using System.Security.Claims;
@@ -38,15 +39,17 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         {
             if (!SetUserIdIS()) return Unauthorized();
 
-            var notes = _myEventService.GetMyEvents();
-            return View(notes.ToList());
+            var myEvents = _myEventService.GetMyEvents();
+            return View(myEvents.ToList());
         }
 
 
         
         public ActionResult Create()
         {
-            ViewBag.CategorySelectList = new SelectList(GetCategoryList(), "CategoryId", "Name");
+            ViewBag.CategorySelectList = new SelectList(GetCategoryList(), "Id", "Name");
+            ViewBag.LocationSelectList = new SelectList(GetLocationList(), "Id", "Name");
+
             return View();
         }
 
@@ -94,7 +97,7 @@ namespace MyEventTrackerOG.WebMVC.Controllers
             {
                 MyEventId = detail.MyEventId,
                 EventName = detail.EventName,
-                Location = detail.Location,
+                LocationId = detail.LocationId,
                 Content = detail.Content
             };
             return View(model);
@@ -150,6 +153,11 @@ namespace MyEventTrackerOG.WebMVC.Controllers
             return _myEventService.CreateCategoryList();
         }
 
+        private IEnumerable<LocationListItem> GetLocationList()
+        {
+            if (!SetUserIdIS()) return default;
+            return _myEventService.CreateLocationList();
+        }
 
     }
 }

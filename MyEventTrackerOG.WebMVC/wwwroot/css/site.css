@@ -15,4 +15,24 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: #f2f6f8;
 }
+
+h1 {
+    font-family: Broadway;
+    color: #002b3d;
+}
+
+
+a {
+    font-size: 25px;
+    color: lightcoral;
+}
+
+a:hover {
+    color: #565656;
+    font-family:'French Script MT';
+    text-decoration: none;
+    font-size: 32px;
+}
+
