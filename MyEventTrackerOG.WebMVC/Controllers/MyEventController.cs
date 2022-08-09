@@ -47,8 +47,8 @@ namespace MyEventTrackerOG.WebMVC.Controllers
         
         public ActionResult Create()
         {
-            ViewBag.CategorySelectList = new SelectList(GetCategoryList(), "Id", "Name");
-            ViewBag.LocationSelectList = new SelectList(GetLocationList(), "Id", "Name");
+            ViewBag.CategorySelectList = new SelectList(GetCategoryList(), "CategoryId", "Name");
+            ViewBag.LocationSelectList = new SelectList(GetLocationList(), "LocationId", "Name");
 
             return View();
         }
@@ -64,7 +64,6 @@ namespace MyEventTrackerOG.WebMVC.Controllers
                 return View(model);
             }
 
-            ViewBag.CategorySelectList = new SelectList(GetCategoryList(), "CategoryId", "Name");
 
             if (_myEventService.CreateMyEvent(model))
             {
