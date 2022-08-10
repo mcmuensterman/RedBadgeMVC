@@ -7,23 +7,20 @@ using System.Threading.Tasks;
 
 namespace MyEventTrackerOG.Models.MyEvent
 {
-    public class MyEventDetail
+    public class MyEventEdit
     {
-        [Display(Name = "ID")]
+        [Required]
         public int MyEventId { get; set; }
-
-        [Display(Name ="Name of Event")]
+        [Required]
         public string EventName { get; set; }
+        [Required]
         public int LocationId { get; set; }
-        [Display(Name ="Event Location")]
-        public string LocationName { get; set; }
-        [Display(Name ="About")]
+        [Required]
         public string Content { get; set; }
-
-        [Display(Name="Event Date and Time")]
+        [Required]
         public DateTime EventDate { get; set; }
+        [Required]
         public int CategoryId { get; set; }
-        [Display(Name ="Type of Event")]
-        public string CategoryName { get; set; }
+
     }
 }

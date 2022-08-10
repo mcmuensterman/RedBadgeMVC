@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEventTrackerOG.Data;
 
@@ -11,9 +12,10 @@ using MyEventTrackerOG.Data;
 namespace MyEventTrackerOG.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220722004653_MigrationCategoryAdd")]
+    partial class MigrationCategoryAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,26 +246,6 @@ namespace MyEventTrackerOG.Data.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("MyEventTrackerOG.Data.Location", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Locations");
-                });
-
             modelBuilder.Entity("MyEventTrackerOG.Data.MyEvent", b =>
                 {
                     b.Property<int>("MyEventId")
@@ -288,8 +270,10 @@ namespace MyEventTrackerOG.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("LocationId")
-                        .HasColumnType("int");
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
@@ -297,8 +281,6 @@ namespace MyEventTrackerOG.Data.Migrations
                     b.HasKey("MyEventId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("LocationId");
 
                     b.ToTable("MyEvents");
                 });
@@ -362,15 +344,7 @@ namespace MyEventTrackerOG.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyEventTrackerOG.Data.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Category");
-
-                    b.Navigation("Location");
                 });
 #pragma warning restore 612, 618
         }

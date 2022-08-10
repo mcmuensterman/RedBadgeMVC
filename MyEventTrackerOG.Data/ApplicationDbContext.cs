@@ -11,6 +11,8 @@ namespace MyEventTrackerOG.Data
         }
 
         public DbSet<MyEvent> MyEvents { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
     }
 }

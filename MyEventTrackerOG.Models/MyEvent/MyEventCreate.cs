@@ -12,10 +12,13 @@ namespace MyEventTrackerOG.Models.MyEvent
         [Required]
         [MaxLength(100, ErrorMessage = "Max 100 characters")]
         public string EventName { get; set; }
-        public string Location { get; set; }
         [Required]
         [MaxLength(2000, ErrorMessage = "Max 2000 characters")]
         public string Content { get; set; }
         public DateTime EventDate { get; set; }
+        [Required]
+        public int CategoryId { get; set; }
+        //[Required]
+        public int LocationId { get; set; }
     }
 }
